@@ -5,9 +5,10 @@ import path from 'path';
 export enum LogLevel {
     DEBUG = 0,
     INFO = 1,
-    WARN = 2,
-    ERROR = 3,
-    FATAL = 4
+    SUCCESS = 2,
+    WARN = 3,
+    ERROR = 4,
+    FATAL = 5
 }
 
 class SimpleLogger {
@@ -48,10 +49,26 @@ class SimpleLogger {
         }
     }
 
+    debug(message: string): void {
+        if (this.logLevel <= LogLevel.DEBUG) {
+            const formatted = this.formatMessage('DEBUG', message);
+            console.log(chalk.gray(formatted));
+            this.writeToFile(formatted);
+        }
+    }
+
     info(message: string): void {
         if (this.logLevel <= LogLevel.INFO) {
             const formatted = this.formatMessage('INFO', message);
             console.log(chalk.blue(formatted));
+            this.writeToFile(formatted);
+        }
+    }
+
+    success(message: string): void {
+        if (this.logLevel <= LogLevel.SUCCESS) {
+            const formatted = this.formatMessage('SUCCESS', message);
+            console.log(chalk.green(formatted));
             this.writeToFile(formatted);
         }
     }
@@ -68,6 +85,14 @@ class SimpleLogger {
         if (this.logLevel <= LogLevel.ERROR) {
             const formatted = this.formatMessage('ERROR', message);
             console.log(chalk.red(formatted));
+            this.writeToFile(formatted);
+        }
+    }
+
+    fatal(message: string): void {
+        if (this.logLevel <= LogLevel.FATAL) {
+            const formatted = this.formatMessage('FATAL', message);
+            console.log(chalk.redBright(formatted));
             this.writeToFile(formatted);
         }
     }
